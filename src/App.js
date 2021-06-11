@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Form, ListGroup, Spinner } from "react-bootstrap";
 import "./styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Component from "./components/Component";
+
 const data = [
   { id: 1, name: "devrecipes.net" },
   { id: 2, name: "devrecipes" },
@@ -18,6 +20,7 @@ const mockResults = (keyword) => {
     }, 500);
   });
 };
+
 
 export default function App() {
   const [results, setResults] = useState([]);
@@ -79,7 +82,9 @@ export default function App() {
           )}
         </ListGroup>
       </Form.Group>
+      <Component/>
     </div>
+
   );
 }
 
