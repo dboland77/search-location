@@ -20,7 +20,6 @@ export default function App() {
     const loadLocations = async () => {     
       const response = await axios.get(URL);
       setLocations(response.data);
-      console.log(response.data)
     };
     setIsLoading(true)
     loadLocations();
@@ -31,7 +30,6 @@ export default function App() {
   useEffect(()=>{
     let matches = [];
     if (name.length > 0) {
-     console.log("hello",name,locations)
       matches = locations.filter((location) => {
         const regex = new RegExp(`^${name}`, "gi");
         return location.name.match(regex);
