@@ -28,21 +28,22 @@ export default function App() {
     
   }, [URL]);
 
-  const handleInputChange = (e) => {
-    let text = e.target.value
-    setURL(()=> `${baseURL}?q=${text}`)
-    console.log(URL)
+  useEffect(()=>{
     let matches = [];
-    if (text.length > 0) {
-     // console.log("hello",name,locations, text)
+    if (name.length > 0) {
+     console.log("hello",name,locations)
       matches = locations.filter((location) => {
-        const regex = new RegExp(`^${text}`, "gi");
+        const regex = new RegExp(`^${name}`, "gi");
         return location.name.match(regex);
       });
     }
-    //console.log('matches', matches)
-    setName(text);
     setSuggestions(matches);
+  },[locations,name])
+
+  const handleInputChange = (e) => {
+    let text = e.target.value
+    setURL(`${baseURL}?q=${text}`)
+    setName(text);
   };
 
   const onNameSelected = (selectedName) => {
