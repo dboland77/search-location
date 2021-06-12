@@ -3,6 +3,7 @@ import { Form, ListGroup, Spinner } from "react-bootstrap";
 import "./styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
+import Map from "./Map"
 
 export default function App() {
   const baseURL = "https://code-challenge-backend.herokuapp.com/locations"
@@ -79,6 +80,7 @@ export default function App() {
           )}
         </ListGroup>
       </Form.Group>
+      <Map/>
     </div>
   );
 }
