@@ -2,7 +2,16 @@ import React, { useState } from "react";
 import { Form, ListGroup, Spinner } from "react-bootstrap";
 import "./styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Component from "./components/Component";
+import useFetch from './useFetch'
+
+export function Component() {
+  const url = `http://jsonplaceholder.typicode.com/posts`
+  const { status, data, error } = useFetch(url)
+  console.log({ status, data, error })
+
+  // your component JSX
+  return <div>{status}</div>
+}
 
 const data = [
   { id: 1, name: "devrecipes.net" },
@@ -22,7 +31,7 @@ const mockResults = (keyword) => {
 };
 
 
-export default function App() {
+export default function App () {
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
