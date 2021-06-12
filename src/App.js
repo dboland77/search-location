@@ -1,66 +1,54 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, ListGroup, Spinner } from "react-bootstrap";
 import "./styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import useFetch from './useFetch'
+import axios from "axios";
 
-export function Component() {
-  const url = `http://jsonplaceholder.typicode.com/posts`
-  const { status, data, error } = useFetch(url)
-  console.log({ status, data, error })
-
-  // your component JSX
-  return <div>{status}</div>
-}
-
-const data = [
-  { id: 1, name: "devrecipes.net" },
-  { id: 2, name: "devrecipes" },
-  { id: 3, name: "devrecipe" },
-  { id: 4, name: "dev recipes" },
-  { id: 5, name: "development" }
-];
-
-const mockResults = (keyword) => {
-  return new Promise((res, rej) => {
-    setTimeout(() => {
-      const searchResults = data.filter((item) => item.name.includes(keyword));
-      res(searchResults);
-    }, 500);
-  });
-};
-
-
-export default function App () {
-  const [results, setResults] = useState([]);
+export default function App() {
+  const baseURL = "https://code-challenge-backend.herokuapp.com/locations"
+  
+  const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
   const [isNameSelected, setIsNameSelected] = useState(false);
+  const [locations, setLocations] = useState([]);
+  const [URL,setURL] = useState(baseURL)
+
+  // can add either /is or ?q=lon
+
+  useEffect(() => {
+    const loadLocations = async () => {     
+      const response = await axios.get(URL);
+      setLocations(response.data);
+      console.log(response.data)
+    };
+    setIsLoading(true)
+    loadLocations();
+    setIsLoading(false)
+    
+  }, [URL]);
 
   const handleInputChange = (e) => {
-    const nameValue = e.target.value;
-    setName(nameValue);
-    // even if we've selected already an item from the list, we should reset it since it's been changed
-    setIsNameSelected(false);
-    // clean previous results, as would be the case if we get the results from a server
-    setResults([]);
-    if (nameValue.length > 1) {
-      setIsLoading(true);
-      mockResults(nameValue)
-        .then((res) => {
-          setResults(res);
-          setIsLoading(false);
-        })
-        .catch(() => {
-          setIsLoading(false);
-        });
+    let text = e.target.value
+    setURL(()=> `${baseURL}?q=${text}`)
+    console.log(URL)
+    let matches = [];
+    if (text.length > 0) {
+     // console.log("hello",name,locations, text)
+      matches = locations.filter((location) => {
+        const regex = new RegExp(`^${text}`, "gi");
+        return location.name.match(regex);
+      });
     }
+    //console.log('matches', matches)
+    setName(text);
+    setSuggestions(matches);
   };
 
   const onNameSelected = (selectedName) => {
     setName(selectedName);
     setIsNameSelected(true);
-    setResults([]);
+    setSuggestions([]);
   };
 
   return (
@@ -72,10 +60,11 @@ export default function App () {
           onChange={handleInputChange}
           value={name}
         />
+        <div> {name}</div>
         <ListGroup className="typeahead-list-group">
           {!isNameSelected &&
-            results.length > 0 &&
-            results.map((result) => (
+            suggestions.length > 0 &&
+            suggestions.map((result) => (
               <ListGroup.Item
                 key={result.id}
                 className="typeahead-list-group-item"
@@ -84,16 +73,13 @@ export default function App () {
                 {result.name}
               </ListGroup.Item>
             ))}
-          {!results.length && isLoading && (
+          {!suggestions.length && isLoading && (
             <div className="typeahead-spinner-container">
               <Spinner animation="border" />
             </div>
           )}
         </ListGroup>
       </Form.Group>
-      <Component/>
     </div>
-
   );
 }
-
