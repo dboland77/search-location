@@ -46,6 +46,7 @@ console.log(d);
 
 foo()
 
+## Response 3
 The expression d = d || 5 will default to 5 for any falsy value of d. 
 
 when calling foo without specifying d the value will default to undefined. It would be more useful to specify a default parameter of 5 instead of the or.
