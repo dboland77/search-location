@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Form, ListGroup, Spinner } from "react-bootstrap";
-import "./styles.css";
+import "../styles/styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { useHistory } from "react-router-dom";

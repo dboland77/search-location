@@ -1,6 +1,6 @@
 
-import Map from "./Map";
-import Home from "./Home"
+import Map from "./components/Map/Map";
+import Home from "./components/Home"
 import { Route } from "react-router-dom";
 
 export default function App() {
