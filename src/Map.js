@@ -2,11 +2,10 @@ import React, {Fragment} from "react";
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 import { mapStyles } from "./mapStyles";
 import { Link } from "react-router-dom";
-import "./Map.css";
 
 const containerStyle = {
-  width: "50vw",
-  height: "50vh",
+  width: "60vw",
+  height: "60vh",
 };
 
 const options = {
@@ -29,11 +28,12 @@ const Map = (props) => {
 
   return (
     <Fragment>
+    <h1>{props.location.state.name}</h1>
       <div className="mapcontainer">
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={center}
-          zoom={10}
+          zoom={15}
           options={options}
         ></GoogleMap>
       </div>

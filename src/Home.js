@@ -59,9 +59,9 @@ export default function App() {
   //Route to the map
   useEffect(() => {
     if (latitude !== 0 && longitude !== 0) {
-      history.push("/map", { lat: latitude, lng: longitude });
+      history.push("/map", { lat: latitude, lng: longitude, name: name});
     }
-  }, [latitude, longitude, history]);
+  }, [latitude, longitude, name, history]);
 
   const handleInputChange = (e) => {
     let text = e.target.value;
@@ -79,10 +79,12 @@ export default function App() {
 
   return (
     <div className="Home">
+    <h5> Locations will display as you type please click on the location for more details and map. </h5>
       <Form.Group className="typeahead-form-group">
         <Form.Control
           type="text"
           autoComplete="off"
+          placeholder="Please start typing a location"
           onChange={handleInputChange}
           value={name}
         />
