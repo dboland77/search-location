@@ -19,7 +19,6 @@ export default function App() {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
 
-
   // load all locations
   useEffect(() => {
     const loadLocations = async () => {
@@ -47,11 +46,9 @@ export default function App() {
   useEffect(() => {
     if (locationid !== 0) {
       const loadLocation = async () => {
-        console.log(`${baseURL}/${locationid}`);
         const response = await axios.get(`${baseURL}/${locationid}`);
-        console.log(response.data);
-        setLatitude(response.data.latitude)
-        setLongitude(response.data.longitude)
+        setLatitude(response.data.latitude);
+        setLongitude(response.data.longitude);
       };
       setIsLoading(true);
       loadLocation();
@@ -59,10 +56,12 @@ export default function App() {
     }
   }, [isNameSelected, locationid]);
 
-  //Route to the map 
-  useEffect(()=>{
-       // history.push("/map", {lat: 53.6011, long: -2.2567});
-  },[latitude, longitude, history])
+  //Route to the map
+  useEffect(() => {
+    if (latitude !== 0 && longitude !== 0) {
+      history.push("/map", { lat: latitude, lng: longitude });
+    }
+  }, [latitude, longitude, history]);
 
   const handleInputChange = (e) => {
     let text = e.target.value;
@@ -72,7 +71,7 @@ export default function App() {
 
   const onNameSelected = (selectedName) => {
     setName(selectedName);
-    const thisLocation = locations.filter(a=>a.name===selectedName)
+    const thisLocation = locations.filter((a) => a.name === selectedName);
     setLocationid(thisLocation[0].id);
     setIsNameSelected(true);
     setSuggestions([]);

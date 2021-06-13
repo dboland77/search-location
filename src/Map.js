@@ -9,16 +9,17 @@ const containerStyle = {
   height: "50vh",
 };
 
-const center = {
-  lat: 35.6804,
-  lng: 139.769,
-};
-
 const options = {
   styles: mapStyles,
 };
 
 const Map = (props) => {
+  console.log(props.location.state)
+  const center = {
+    lat: props.location.state.lat,
+    lng: props.location.state.lng,
+  };
+
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
   });
