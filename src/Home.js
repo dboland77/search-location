@@ -3,19 +3,24 @@ import { Form, ListGroup, Spinner } from "react-bootstrap";
 import "./styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 
 export default function App() {
   const baseURL = "https://code-challenge-backend.herokuapp.com/locations";
+  const history = useHistory();
 
   const [suggestions, setSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState("");
   const [isNameSelected, setIsNameSelected] = useState(false);
   const [locations, setLocations] = useState([]);
+  const [locationid, setLocationid] = useState(0);
   const [URL, setURL] = useState(baseURL);
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
 
-  // can add either /is or ?q=lon
 
+  // load all locations
   useEffect(() => {
     const loadLocations = async () => {
       const response = await axios.get(URL);
@@ -26,6 +31,7 @@ export default function App() {
     setIsLoading(false);
   }, [URL]);
 
+  //Filter locations and set URL to load
   useEffect(() => {
     let matches = [];
     if (name.length > 0) {
@@ -37,6 +43,27 @@ export default function App() {
     setSuggestions(matches);
   }, [locations, name]);
 
+  // Set the location to load and send the axios request
+  useEffect(() => {
+    if (locationid !== 0) {
+      const loadLocation = async () => {
+        console.log(`${baseURL}/${locationid}`);
+        const response = await axios.get(`${baseURL}/${locationid}`);
+        console.log(response.data);
+        setLatitude(response.data.latitude)
+        setLongitude(response.data.longitude)
+      };
+      setIsLoading(true);
+      loadLocation();
+      setIsLoading(false);
+    }
+  }, [isNameSelected, locationid]);
+
+  //Route to the map 
+  useEffect(()=>{
+       // history.push("/map", {lat: 53.6011, long: -2.2567});
+  },[latitude, longitude, history])
+
   const handleInputChange = (e) => {
     let text = e.target.value;
     setURL(`${baseURL}?q=${text}`);
@@ -45,6 +72,8 @@ export default function App() {
 
   const onNameSelected = (selectedName) => {
     setName(selectedName);
+    const thisLocation = locations.filter(a=>a.name===selectedName)
+    setLocationid(thisLocation[0].id);
     setIsNameSelected(true);
     setSuggestions([]);
   };

@@ -2,10 +2,11 @@ import React, {Fragment} from "react";
 import { GoogleMap, useLoadScript } from "@react-google-maps/api";
 import { mapStyles } from "./mapStyles";
 import { Link } from "react-router-dom";
+import "./Map.css";
 
 const containerStyle = {
-  width: "100vw",
-  height: "100vh",
+  width: "50vw",
+  height: "50vh",
 };
 
 const center = {
@@ -17,7 +18,7 @@ const options = {
   styles: mapStyles,
 };
 
-const Map = () => {
+const Map = (props) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
   });
@@ -27,7 +28,7 @@ const Map = () => {
 
   return (
     <Fragment>
-      <div className="Map">
+      <div className="mapcontainer">
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={center}
@@ -35,7 +36,9 @@ const Map = () => {
           options={options}
         ></GoogleMap>
       </div>
-      <Link to="/">Home</Link>
+      <br/>
+      <br/>
+      <Link to="/">HOME</Link>
     </Fragment>
   );
 };
