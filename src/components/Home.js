@@ -25,7 +25,6 @@ export default function App() {
       const response = await axios.get(URL);
       setLocations(response.data);
     };
-    setIsLoading(true);
     loadLocations();
     setIsLoading(false);
   }, [URL]);
@@ -34,6 +33,7 @@ export default function App() {
   useEffect(() => {
     let matches = [];
     if (name.length > 0) {
+      setIsLoading(true);
       matches = locations.filter((location) => {
         const regex = new RegExp(`^${name}`, "gi");
         return location.name.match(regex);
@@ -88,7 +88,6 @@ export default function App() {
           onChange={handleInputChange}
           value={name}
         />
-        <div> {name}</div>
         <ListGroup className="typeahead-list-group">
           {!isNameSelected &&
             suggestions.length > 0 &&
@@ -101,7 +100,7 @@ export default function App() {
                 {result.name}
               </ListGroup.Item>
             ))}
-          {!suggestions.length && isLoading && (
+          {(suggestions.length === 0) && isLoading && (
             <div className="typeahead-spinner-container">
               <Spinner animation="border" />
             </div>
