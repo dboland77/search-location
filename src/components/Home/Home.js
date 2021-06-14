@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Form, ListGroup, Spinner } from "react-bootstrap";
-import "../styles/styles.css";
+import "../../styles/styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
@@ -21,12 +21,26 @@ export default function App() {
 
   // load all locations
   useEffect(() => {
+    const source = axios.CancelToken.source();
+
     const loadLocations = async () => {
-      const response = await axios.get(URL);
-      setLocations(response.data);
+      try {
+        const response = await axios.get(URL);
+        setLocations(response.data);
+      } catch (error) {
+        if (axios.isCancel(error)) {
+        } else {
+          throw error;
+        }
+      }
     };
+
     loadLocations();
     setIsLoading(false);
+
+    return () => {
+      source.cancel();
+    };
   }, [URL]);
 
   //Filter locations and set URL to load
@@ -44,22 +58,35 @@ export default function App() {
 
   // Set the location to load and send the axios request
   useEffect(() => {
+    const source = axios.CancelToken.source();
+
     if (locationid !== 0) {
       const loadLocation = async () => {
-        const response = await axios.get(`${baseURL}/${locationid}`);
-        setLatitude(response.data.latitude);
-        setLongitude(response.data.longitude);
+        try {
+          const response = await axios.get(`${baseURL}/${locationid}`);
+          setLatitude(response.data.latitude);
+          setLongitude(response.data.longitude);
+        } catch (error) {
+          if (axios.isCancel(error)) {
+          } else {
+            throw error;
+          }
+        }
       };
       setIsLoading(true);
       loadLocation();
       setIsLoading(false);
     }
+
+    return () => {
+      source.cancel();
+    };
   }, [isNameSelected, locationid]);
 
   //Route to the map
   useEffect(() => {
     if (latitude !== 0 && longitude !== 0) {
-      history.push("/map", { lat: latitude, lng: longitude, name: name});
+      history.push("/map", { lat: latitude, lng: longitude, name: name });
     }
   }, [latitude, longitude, name, history]);
 
@@ -79,7 +106,11 @@ export default function App() {
 
   return (
     <div className="Home">
-    <h5> Locations will display as you type please click on the location for more details and map. </h5>
+      <h5>
+        {" "}
+        Locations will display as you type please click on the location for more
+        details and map.{" "}
+      </h5>
       <Form.Group className="typeahead-form-group">
         <Form.Control
           type="text"
@@ -100,7 +131,7 @@ export default function App() {
                 {result.name}
               </ListGroup.Item>
             ))}
-          {(suggestions.length === 0) && isLoading && (
+          {suggestions.length === 0 && isLoading && (
             <div className="typeahead-spinner-container">
               <Spinner animation="border" />
             </div>

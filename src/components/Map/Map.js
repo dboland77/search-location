@@ -12,7 +12,6 @@ const options = {
 };
 
 const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY
-console.log(API_KEY)
 
 const Map = (props) => {
   const center = {
@@ -27,7 +26,6 @@ const Map = (props) => {
   if (loadError) return "Error loading maps";
   if (!isLoaded) return "Loading maps";
 
-  console.log(API_KEY)
 
   return (
     <Fragment>
