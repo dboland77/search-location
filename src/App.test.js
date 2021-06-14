@@ -9,6 +9,8 @@ const app = (
     <App />
   </Router>
 );
+
+//This will also render Home
 describe("App Component", () => {
   test("renders", () => {
     render(app);
